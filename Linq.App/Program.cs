@@ -241,13 +241,6 @@ int maxAge = students.Max(s => s.Age);
 
 Console.WriteLine($"Max age: {maxAge}");
 
-// Aggregate
-var allNames = students
-    .Select(s => s.Name)
-    .Aggregate((current, next) => current + ", " + next);
-
-Console.WriteLine($"All names: {allNames}");
-
 
 // ==========================================
 // 8. DISTINCT, UNION, INTERSECT, EXCEPT
@@ -461,27 +454,8 @@ var emptyCourses = courses.Where(c =>
 
 Print("Courses without students", emptyCourses);
 
-
 // ==========================================
-// 14. SELECT MANY
-// ==========================================
-
-Section("SELECT MANY");
-
-// Flatten nested collections
-var flattened = students.SelectMany(s =>
-    enrollments.Where(e => e.StudentId == s.Id),
-    (s, e) => new
-    {
-        Student = s.Name,
-        e.CourseId
-    });
-
-Print("SelectMany", flattened);
-
-
-// ==========================================
-// 15. DEFAULTIFEMPTY
+// 14. DEFAULTIFEMPTY
 // ==========================================
 
 Section("DEFAULT IF EMPTY");
@@ -494,7 +468,7 @@ Print("DefaultIfEmpty", defaultResult);
 
 
 // ==========================================
-// 16. TO LIST, TO ARRAY, TO DICTIONARY
+// 15. TO LIST, TO ARRAY, TO DICTIONARY
 // ==========================================
 
 Section("CONVERSION");
@@ -511,102 +485,9 @@ var studentDictionary = students.ToDictionary(s => s.Id);
 
 Console.WriteLine($"Student 1: {studentDictionary[1].Name}");
 
-// ToLookup
-var studentsLookup = students.ToLookup(s => s.Age);
-
-Console.WriteLine("\nStudents with age 21:");
-
-foreach (var s in studentsLookup[21])
-    Console.WriteLine(s.Name);
-
 
 // ==========================================
-// 17. ZIP
-// ==========================================
-
-Section("ZIP");
-
-var firstNames = new[] { "Ali", "Sara", "Reza" };
-var scores = new[] { 18, 20, 15 };
-
-var zipped = firstNames.Zip(scores,
-    (name, score) => new
-    {
-        Name = name,
-        Score = score
-    });
-
-Print("Zip", zipped);
-
-
-// ==========================================
-// 18. CHUNK
-// ==========================================
-
-Section("CHUNK");
-
-var chunks = students.Chunk(3);
-
-foreach (var chunk in chunks)
-{
-    Console.WriteLine("\nNew Chunk:");
-
-    foreach (var s in chunk)
-        Console.WriteLine(s.Name);
-}
-
-
-// ==========================================
-// 19. OF TYPE
-// ==========================================
-
-Section("OF TYPE");
-
-var mixedData = new object[]
-{
-    10,
-    "Hello",
-    20,
-    "World",
-    30
-};
-
-var onlyStrings = mixedData.OfType<string>();
-
-Print("Only strings", onlyStrings);
-
-var onlyIntegers = mixedData.OfType<int>();
-
-Print("Only integers", onlyIntegers);
-
-
-// ==========================================
-// 20. DEFERRED EXECUTION
-// ==========================================
-
-Section("DEFERRED EXECUTION");
-
-var numbers = new List<int> { 1, 2, 3 };
-
-var query = numbers.Where(n => n > 1);
-
-// Query hasn't executed yet
-numbers.Add(4);
-
-// Query executes when enumerated
-Print("Deferred execution", query);
-
-// Immediate execution with ToList
-var materializedQuery = numbers.Where(n => n > 1).ToList();
-
-numbers.Add(5);
-
-// 5 won't appear in materializedQuery
-Print("Materialized query", materializedQuery);
-
-
-// ==========================================
-// 21. EXPRESSION EXAMPLE
+// 16. EXPRESSION EXAMPLE
 // ==========================================
 
 Section("EXPRESSION AND QUERY");
